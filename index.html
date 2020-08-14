@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html class='use-all-space'>
+<head>
+    <meta http-equiv='X-UA-Compatible' content='IE=Edge' />
+    <meta charset='UTF-8'>
+    <title>Maps SDK for Web - Vector map</title>
+    <meta name='viewport'
+          content='width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no'/>
+    <link rel='stylesheet' type='text/css' href='https://api.tomtom.com/maps-sdk-for-web/cdn/5.x/5.63.0/maps/maps.css'>
+    <link rel="stylesheet" href="./sdk/dist/maps.css">
+    <!-- <link rel='stylesheet' type='text/css' href='../assets/ui-library/index.css'/> -->
+
+</head>
+<body>
+    <div id='map' class='map'></div>
+    <script src='https://api.tomtom.com/maps-sdk-for-web/cdn/5.x/5.63.0/maps/maps-web.min.js'></script>
+    <script type='text/javascript' src='mobile-or-tablet.js'></script>
+    <script>
+        var map = tt.map({
+            key: 'r9XaUhqQDnzNiLbq7chLHmcA5e6A1RzI',
+            container: 'map',
+            style: 'tomtom://vector/1/basic-main',
+            dragPan: !isMobileOrTablet()
+        });
+        map.addControl(new tt.FullscreenControl());
+        map.addControl(new tt.NavigationControl());
+    </script>
+</body>
+</html>
