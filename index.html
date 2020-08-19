@@ -7,28 +7,69 @@
     <meta name='viewport'
           content='width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no'/>
     <link rel='stylesheet' type='text/css' href='https://api.tomtom.com/maps-sdk-for-web/cdn/5.x/5.63.0/maps/maps.css'>
-    <link rel="stylesheet" href="./sdk/dist/maps.css">
-    <!-- <link rel='stylesheet' type='text/css' href='../assets/ui-library/index.css'/> -->
+    <script src="https://api.tomtom.com/maps-sdk-for-web/cdn/5.x/5.63.0/maps/maps-web.min.js"></script>
+    <script src="https://api.tomtom.com/maps-sdk-for-web/cdn/5.x/5.63.0/services/services-web.min.js"></script>
     <style>
         #map {
-            width: 100vw;
-            height: 100vh;
+            width: 90vw;
+            height: 90vh;
         }
      </style>
 </head>
 <body>
+    
+
+    <input type="text" value="" id="query" >
+    <button type="submit" onclick="search()"> Rechercher</button>
     <div id='map' class='map'></div>
-    <script src='https://api.tomtom.com/maps-sdk-for-web/cdn/5.x/5.63.0/maps/maps-web.min.js'></script>
-    <script type='text/javascript' src='mobile-or-tablet.js'></script>
+
+
+    <!-- <script src='https://api.tomtom.com/maps-sdk-for-web/cdn/5.x/5.63.0/maps/maps-web.min.js'></script> -->
+   
     <script>
+        APIKEY = "r9XaUhqQDnzNiLbq7chLHmcA5e6A1RzI"
+        var abidjan = [-4.024429, 5.345317 ]
         var map = tt.map({
-            key: 'r9XaUhqQDnzNiLbq7chLHmcA5e6A1RzI',
+            key: APIKEY,
             container: 'map',
             style: 'tomtom://vector/1/basic-main',
-            dragPan: !isMobileOrTablet()
+            center: abidjan,
+            zoom: 12,
+            //dragPan: !isMobileOrTablet()
         });
+
+        //controle the map screen 
         map.addControl(new tt.FullscreenControl());
         map.addControl(new tt.NavigationControl());
+
+        //move map to a specifique location 
+        var moveMapp = function(lnglat) {
+            map.flyTo({
+                center: lnglat,
+                zoom: 14
+            })
+        }
+
+        //handle searsh result 
+        var handleResults = function (result) {
+            console.log(result);
+            if (result.results) {
+                moveMapp(result.results[0].position)
+            }
+        };
+
+        //take a search string and handle it
+        var search = function () {
+            console.log(tt.services)
+            tt.services.fuzzySearch({
+                key: APIKEY,
+                query: document.getElementById("query").value
+              })
+              .go()
+              .then(handleResults);
+        };
+
+
     </script>
 </body>
 </html>
