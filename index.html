@@ -18,14 +18,10 @@
 </head>
 <body>
     
-
     <input type="text" value="" id="query" >
     <button type="submit" onclick="search()"> Rechercher</button>
     <div id='map' class='map'></div>
 
-
-    <!-- <script src='https://api.tomtom.com/maps-sdk-for-web/cdn/5.x/5.63.0/maps/maps-web.min.js'></script> -->
-   
     <script>
         //Variables 
         APIKEY = "r9XaUhqQDnzNiLbq7chLHmcA5e6A1RzI"
@@ -42,6 +38,14 @@
         //controle the map screen 
         map.addControl(new tt.FullscreenControl());
         map.addControl(new tt.NavigationControl());
+
+        //get current location of the user 
+        map.addControl(new tt.GeolocateControl({
+            positionOptions: {
+                enableHightAccuracy: true
+            },
+            trackUserlocation: true
+        }))
 
         //move map to a specifique location 
         var moveMapp = function(lnglat) {
@@ -75,7 +79,6 @@
               .go()
               .then(handleResults);
         };
-
 
     </script>
 </body>
