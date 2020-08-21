@@ -20,6 +20,9 @@
     
     <input type="text" value="" id="query" >
     <button type="submit" onclick="search()"> Rechercher</button>
+    <button type="submit" onclick="clearMarker()"> Clear maker</button>
+    <button type="submit" onclick="createRoute()"> Create route </button>
+
     <div id='map' class='map'></div>
 
     <script>
@@ -34,6 +37,59 @@
             zoom: 12,
             //dragPan: !isMobileOrTablet()
         });
+
+        markers = []
+        map.on("click", function(event) {
+            console.log(event)
+            console.log(event.lnglat)
+            
+            var marker = new tt.Marker().setLngLat(event.lngLat ).addTo(map)
+            markers.push(marker)
+        })
+
+        var clearMarker = function () {
+            for (marker of markers) {
+                marker.remove()
+            }
+            markers = []
+        }
+
+
+        var displayRoute = function (geoJSON) {
+            routeLayer = map.addLayer({
+                'id': 'route',
+                'type': 'line',
+                'source': {
+                    'type': 'geojson',
+                    'data': geoJSON
+                },
+                'paint': {
+                    'line-color': 'red',
+                    'line-width': 5
+                }
+            })
+        }
+
+        var createRoute = function () {
+            //create the option !!
+            var routeOptions = {
+                key: APIKEY, 
+                locations: [],
+
+            }
+            for (marker of markers) {
+                routeOptions.locations.push(marker.getLngLat())
+            }
+            //execute the routing API
+            tt.services.calculateRoute(routeOptions).go().then(
+                function(routeData) {
+                    console.log(routeData)
+                    var geo = routeData.toGeoJson();
+                    displayRoute(geo)
+                } 
+            )
+
+        }
 
         //controle the map screen 
         map.addControl(new tt.FullscreenControl());
